@@ -1,0 +1,58 @@
+<header class="fixed w-full z-50 bg-white/90 backdrop-blur-sm shadow-md">
+  <div class="container mx-auto px-4">
+    <!-- Desktop Header (visible on md and larger) -->
+    <div class="hidden md:flex flex-col items-center py-4">
+      <!-- Centered Logo -->
+      <a href="/" class="mb-3">
+        <img src="https://t4.ftcdn.net/jpg/04/06/98/77/360_F_406987733_1e07OKnGxudkdq1xMqi1jIqZEzdZkceb.jpg" 
+             alt="Shubamrut Designing Studio Logo" 
+             class="w-20 md:w-24 lg:w-26 h-auto">
+      </a>
+      <!-- Desktop Navigation -->
+      <nav class="flex space-x-6">
+        <a href="/" class="text-primary hover:text-secondary font-medium text-base">Home</a>
+        <a href="/walkthrough" class="text-primary hover:text-secondary font-medium text-base">Walkthrough</a>
+        <a href="/projects" class="text-primary hover:text-secondary font-medium text-base">Projects</a>
+        <a href="/gallery" class="text-primary hover:text-secondary font-medium text-base">Gallery</a>
+        <a href="/about" class="text-primary hover:text-secondary font-medium text-base">About Us</a>
+        <a href="/contact" class="text-primary hover:text-secondary font-medium text-base">Contact</a>
+      </nav>
+    </div>
+    <!-- Mobile Header (visible on small screens) -->
+    <div class="flex md:hidden items-center justify-between py-3">
+      <!-- Mobile Logo (aligned left) -->
+      <a href="/" class="flex-shrink-0">
+        <img src="https://t4.ftcdn.net/jpg/04/06/98/77/360_F_406987733_1e07OKnGxudkdq1xMqi1jIqZEzdZkceb.jpg" 
+             alt="Shubamrut Designing Studio Logo" 
+             class="w-16 h-auto">
+      </a>
+      <!-- Hamburger Menu Button -->
+      <button id="hamburger" class="text-primary hover:text-secondary focus:outline-none">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M4 6h16M4 12h16M4 18h16"></path>
+        </svg>
+      </button>
+    </div>
+    <!-- Mobile Navigation Menu -->
+    <nav id="mobile-menu" class="hidden md:hidden">
+      <div class="flex flex-col space-y-2 py-3">
+        <a href="/" class="block text-primary hover:text-secondary font-medium text-sm">Home</a>
+        <a href="/walkthrough" class="block text-primary hover:text-secondary font-medium text-sm">Walkthrough</a>
+        <a href="/projects" class="block text-primary hover:text-secondary font-medium text-sm">Projects</a>
+        <a href="/gallery" class="block text-primary hover:text-secondary font-medium text-sm">Gallery</a>
+        <a href="/about" class="block text-primary hover:text-secondary font-medium text-sm">About Us</a>
+        <a href="/contact" class="block text-primary hover:text-secondary font-medium text-sm">Contact</a>
+      </div>
+    </nav>
+  </div>
+</header>
+
+<script>
+  // Toggle mobile menu on hamburger click
+  const hamburger = document.getElementById('hamburger');
+  const mobileMenu = document.getElementById('mobile-menu');
+  hamburger.addEventListener('click', () => {
+    mobileMenu.classList.toggle('hidden');
+  });
+</script>
