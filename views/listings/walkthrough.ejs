@@ -1,0 +1,67 @@
+<% layout('/layouts/boilerplate') -%>
+<% title="Walkthrough | Shubamrut Designing Studio" %>
+<% description="Transforming visions into reality with exceptional interior and exterior designs." %>
+
+<main class="pt-20">
+    <!-- Walkthrough Hero Section -->
+    <section class="relative h-screen">
+        <!-- Background Video Container -->
+        <div class="video-container absolute inset-0">
+            <iframe class="w-full h-full"
+                src="https://www.youtube.com/embed/cWNahJVfOqs?playlist=cWNahJVfOqs&autoplay=1&mute=1&controls=0&loop=1&playsinline=1&vq=hd720"
+                title="Walkthrough Background Video" frameborder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                referrerpolicy="strict-origin-when-cross-origin" allowfullscreen preload="auto" loading="lazy">
+            </iframe>
+        </div>
+        <!-- Semi-transparent Overlay -->
+        <div class="absolute inset-0 bg-black/40 z-10"></div>
+        <!-- Hero Content -->
+        <div class="absolute inset-0 flex items-center justify-center z-20">
+            <div class="text-center px-6">
+                <h1 class="text-5xl md:text-6xl font-bold text-white mb-4">Walkthroughs</h1>
+                <p class="text-lg md:text-xl text-white/90 max-w-2xl mx-auto">
+                    Discover our design process and see our projects come to life.
+                </p>
+            </div>
+        </div>
+        <!-- Bouncing Arrow Indicator -->
+        <div class="absolute bottom-10 left-1/2 -translate-x-1/2 z-20 animate-bounce">
+            <i class="ri-arrow-down-line text-white ri-2x"></i>
+        </div>
+    </section>
+
+    <!-- Walkthrough Videos Section (Square Video Cards) -->
+    <section class="py-20 bg-white">
+        <div class="container mx-auto px-6">
+            <h2 class="text-4xl font-bold text-primary text-center mb-12">Video Walkthroughs</h2>
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
+                
+                <!-- Video Card 1 -->
+                <div class="relative rounded-lg overflow-hidden shadow-xl">
+                    <div class="video-container" style="aspect-ratio: 1/1;">
+                        <iframe class="w-full h-full"
+                            src="https://www.youtube.com/embed/cWNahJVfOqs?playlist=cWNahJVfOqs&autoplay=1&mute=1&loop=1&controls=0&playsinline=1&vq=hd720"
+                            title="Walkthrough Video 1" frameborder="0"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                            referrerpolicy="strict-origin-when-cross-origin" allowfullscreen loading="lazy">
+                        </iframe>
+                    </div>
+                </div>
+
+                <!-- Video Card 2 -->
+                <div class="relative rounded-lg overflow-hidden shadow-xl">
+                    <div class="video-container" style="aspect-ratio: 1/1;">
+                        <iframe class="w-full h-full"
+                            src="https://www.youtube.com/embed/i7MhqcUBrHY?playlist=i7MhqcUBrHY&autoplay=1&mute=1&loop=1&controls=0&playsinline=1&vq=hd720"
+                            title="Walkthrough Video 2" frameborder="0"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                            referrerpolicy="strict-origin-when-cross-origin" allowfullscreen loading="lazy">
+                        </iframe>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+</main>

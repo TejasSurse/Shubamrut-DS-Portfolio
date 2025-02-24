@@ -2,17 +2,17 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title><%= title || "Shubamrut Designing Studio" %></title>
   <meta name="description" content="<%= description || 'Expert interior and exterior designs by Shubamrut Designing Studio.' %>">
-
+  
   <!-- Tailwind CSS & Fonts -->
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/remixicon@4.5.0/fonts/remixicon.css" rel="stylesheet"/>
-  
+
   <style>
     :where([class^="ri-"])::before { content: "\f3c2"; }
     .scroll-indicator { animation: bounce 2s infinite; }
@@ -21,7 +21,10 @@
       40% { transform: translateY(-10px); }
       60% { transform: translateY(-5px); }
     }
+    /* Prevent any horizontal overflow */
+    html, body { overflow-x: hidden; }
   </style>
+  
   <script>
     tailwind.config = {
       theme: {

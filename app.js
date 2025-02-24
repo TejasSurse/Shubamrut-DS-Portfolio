@@ -48,7 +48,25 @@ app.get("/", (req, res) => {
   res.render('listings/home');
 });
 
+app.get("/walkthrough", (req, res)=>{
+  res.render("listings/walkthrough");
+});
 
+app.get("/contact", (req, res)=>{
+  res.render("listings/contact");
+});
+
+app.get("/about", (req, res)=>{
+  res.render("listings/about");
+});
+
+app.get("/projects", (req, res)=>{
+  res.render("listings/unc");
+});
+
+app.get("/gallery", (req, res)=>{
+  res.render("listings/unc");
+});
 
 
 // // contact form
@@ -76,10 +94,6 @@ app.get("/", (req, res) => {
 //   }
 // });
 
-// Page Not Found
-app.use((req, res) => {
-    res.status(404).render('listings/404');
-});
 
 
 

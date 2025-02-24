@@ -1,12 +1,13 @@
-<header class="fixed w-full z-50 bg-white/90 backdrop-blur-sm shadow-md">
-  <div class="container mx-auto px-4">
+<header class="fixed top-0 left-0 w-full z-50 bg-white/90 backdrop-blur-sm shadow-md">
+  <!-- Use a full-width wrapper with max width -->
+  <div class="w-full max-w-screen-xl mx-auto px-4">
     <!-- Desktop Header (visible on md and larger) -->
     <div class="hidden md:flex flex-col items-center py-4">
       <!-- Centered Logo -->
       <a href="/" class="mb-3">
         <img src="https://t4.ftcdn.net/jpg/04/06/98/77/360_F_406987733_1e07OKnGxudkdq1xMqi1jIqZEzdZkceb.jpg" 
              alt="Shubamrut Designing Studio Logo" 
-             class="w-20 md:w-24 lg:w-26 h-auto">
+             class="w-20 md:w-24 lg:w-24 h-auto max-w-full">
       </a>
       <!-- Desktop Navigation -->
       <nav class="flex space-x-6">
@@ -24,7 +25,7 @@
       <a href="/" class="flex-shrink-0">
         <img src="https://t4.ftcdn.net/jpg/04/06/98/77/360_F_406987733_1e07OKnGxudkdq1xMqi1jIqZEzdZkceb.jpg" 
              alt="Shubamrut Designing Studio Logo" 
-             class="w-16 h-auto">
+             class="w-16 h-auto max-w-full">
       </a>
       <!-- Hamburger Menu Button -->
       <button id="hamburger" class="text-primary hover:text-secondary focus:outline-none">
@@ -35,7 +36,7 @@
       </button>
     </div>
     <!-- Mobile Navigation Menu -->
-    <nav id="mobile-menu" class="hidden md:hidden">
+    <nav id="mobile-menu" class="hidden">
       <div class="flex flex-col space-y-2 py-3">
         <a href="/" class="block text-primary hover:text-secondary font-medium text-sm">Home</a>
         <a href="/walkthrough" class="block text-primary hover:text-secondary font-medium text-sm">Walkthrough</a>
