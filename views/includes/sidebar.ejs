@@ -1,0 +1,21 @@
+<aside class="w-64 h-screen bg-gray-800 text-white fixed top-0 left-0 flex flex-col justify-between pt-20 shadow-lg z-30">
+    
+    <!-- Top Navigation Links -->
+    <nav class="flex flex-col space-y-4 px-6">
+        <a href="/admin/listings" class="text-lg font-medium hover:bg-gray-700 p-3 rounded transition">
+            All Listings
+        </a>
+        <a href="/admin/listings/new" class="text-lg font-medium hover:bg-gray-700 p-3 rounded transition">
+            Create Listing
+        </a>
+    </nav>
+
+    <!-- Logout Button at Bottom -->
+    <div class="px-6 pb-6">
+        <form action="/logout" method="GET">
+            <button type="submit" class="w-full text-left text-lg font-medium bg-white text-gray-800 hover:bg-gray-200 p-3 rounded transition">
+                Logout
+            </button>
+        </form>
+    </div>
+</aside>

@@ -1,0 +1,64 @@
+<% layout('/layouts/boilerplate') -%>
+<% title=(listing && listing.Name ? listing.Name : 'Listing') + " | Shubamrut Designing Studio" %>
+
+<main class="pt-32 p-4 sm:p-8 bg-gray-100 min-h-screen">
+    <div class="max-w-screen-xl mx-auto">
+        <% if (listing) { %>
+            <div class="bg-white p-6 rounded-md shadow-lg animate-fade-in">
+                <h1 class="text-4xl font-bold text-gray-900 mb-8"><%= listing.Name || 'Unnamed Listing' %></h1>
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                    <!-- Images -->
+                    <div class="lg:col-span-2">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <% if (listing.images && Array.isArray(listing.images) && listing.images.length) { %>
+                                <% listing.images.forEach((image, index) => { %>
+                                    <div class="overflow-hidden rounded-md animate-fade-in" style="animation-delay: <%= index * 0.1 %>s;">
+                                        <img src="<%= image.url %>" alt="<%= listing.Name || 'Listing' %>" class="w-full h-96 object-cover transition-transform duration-300 hover:scale-105">
+                                    </div>
+                                <% }) %>
+                            <% } else { %>
+                                <p class="text-gray-600 animate-fade-in">No images available.</p>
+                            <% } %>
+                        </div>
+                    </div>
+                    <!-- Details -->
+                    <div class="lg:sticky lg:top-32 space-y-6">
+                        <div class="flex flex-wrap gap-2">
+                            <span class="inline-block bg-blue-600 text-white px-4 py-1 rounded-full text-sm font-medium transition transform hover:scale-105"><%= listing.type || 'Unknown Type' %></span>
+                            <span class="inline-block bg-blue-600 text-white px-4 py-1 rounded-full text-sm font-medium transition transform hover:scale-105"><%= listing.category || 'Unknown Category' %></span>
+                        </div>
+                        <div>
+                            <h3 class="text-lg font-semibold text-gray-900">Location</h3>
+                            <p class="text-gray-600"><%= listing.location || 'Not specified' %></p>
+                        </div>
+                        <div>
+                            <h3 class="text-lg font-semibold text-gray-900">Description</h3>
+                            <p class="text-gray-600"><%= listing.description || 'No description available' %></p>
+                        </div>
+                        <a href="/gallery" class="inline-block bg-blue-600 text-white px-6 py-3 rounded hover:bg-blue-700 transition transform hover:scale-105">
+                            Back to Gallery
+                        </a>
+                    </div>
+                </div>
+            </div>
+        <% } else { %>
+            <div class="bg-white p-6 rounded-md shadow-lg animate-fade-in">
+                <h1 class="text-4xl font-bold text-gray-900 mb-8">Listing Not Found</h1>
+                <p class="text-gray-600 mb-4">The requested listing could not be found.</p>
+                <a href="/gallery" class="inline-block bg-blue-600 text-white px-6 py-3 rounded hover:bg-blue-700 transition transform hover:scale-105">
+                    Back to Gallery
+                </a>
+            </div>
+        <% } %>
+    </div>
+</main>
+
+<style>
+    @keyframes fade-in {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+    .animate-fade-in {
+        animation: fade-in 0.5s ease-out forwards;
+    }
+</style>

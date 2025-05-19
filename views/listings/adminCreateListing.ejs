@@ -1,0 +1,170 @@
+<% layout('/layouts/boilerplate2') -%>
+<% title="Create Listing | Admin Dashboard" %>
+
+<section class="p-8 mt-1">
+    <h1 class="text-3xl font-bold text-gray-800 mb-6">Create Listing</h1>
+
+    <form id="listingForm" action="/admin/listings" method="POST" enctype="multipart/form-data" class="bg-white p-6 rounded-lg shadow space-y-6">
+        <!-- Name -->
+        <div>
+            <label class="block text-gray-700 font-medium mb-2">Name</label>
+            <input type="text" name="name" required class="w-full p-3 border border-gray-300 rounded" />
+        </div>
+
+        <!-- Type -->
+        <div>
+            <label class="block text-gray-700 font-medium mb-2">Type</label>
+            <select name="type" required class="w-full p-3 border border-gray-300 rounded">
+                <option value="">Select Type</option>
+                <option value="Interior">Interior</option>
+                <option value="Exterior">Exterior</option>
+            </select>
+        </div>
+
+        <!-- Category -->
+        <div>
+            <label class="block text-gray-700 font-medium mb-2">Category</label>
+            <select name="category" required class="w-full p-3 border border-gray-300 rounded">
+                <option value="">Select Category</option>
+                <option value="Floor Plan">Floor Plan</option>
+                <option value="Cut Section">Cut Section</option>
+                <option value="3D Elevation">3D Elevation</option>
+                <option value="Interior Design">Interior Design</option>
+            </select>
+        </div>
+
+        <!-- Separate Image Fields with Preview -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div>
+                <label class="block text-gray-700 font-medium mb-2">Image 1</label>
+                <input type="file" name="image1" accept="image/*" class="w-full p-2 border border-gray-300 rounded" onchange="previewImage(this, 'preview1')" />
+                <img id="preview1" class="mt-2 w-[100px] h-[100px] object-cover border rounded hidden" />
+            </div>
+
+            <div>
+                <label class="block text-gray-700 font-medium mb-2">Image 2</label>
+                <input type="file" name="image2" accept="image/*" class="w-full p-2 border border-gray-300 rounded" onchange="previewImage(this, 'preview2')" />
+                <img id="preview2" class="mt-2 w-[100px] h-[100px] object-cover border rounded hidden" />
+            </div>
+
+            <div>
+                <label class="block text-gray-700 font-medium mb-2">Image 3</label>
+                <input type="file" name="image3" accept="image/*" class="w-full p-2 border border-gray-300 rounded" onchange="previewImage(this, 'preview3')" />
+                <img id="preview3" class="mt-2 w-[100px] h-[100px] object-cover border rounded hidden" />
+            </div>
+        </div>
+
+        <!-- Description -->
+        <div>
+            <label class="block text-gray-700 font-medium mb-2">Description</label>
+            <textarea name="description" rows="4" required class="w-full p-3 border border-gray-300 rounded"></textarea>
+        </div>
+
+        <!-- Location -->
+        <div>
+            <label class="block text-gray-700 font-medium mb-2">Location</label>
+            <input type="text" name="location" required class="w-full p-3 border border-gray-300 rounded" />
+        </div>
+
+        <!-- Listing Type -->
+        <div>
+            <label class="block text-gray-700 font-medium mb-2">Listing Type</label>
+            <select name="listingType" required class="w-full p-3 border border-gray-300 rounded">
+                <option value="">Select Listing Type</option>
+                <option value="Gallery">Gallery</option>
+                <option value="Projects">Projects</option>
+                <option value="Both">Both</option>
+            </select>
+        </div>
+
+        <!-- Loading Indicator -->
+        <div id="loading" class="hidden text-gray-700">Uploading...</div>
+
+        <!-- Submit Button -->
+        <div class="pt-4">
+            <button type="submit" class="bg-blue-600 text-white px-6 py-3 rounded hover:bg-blue-700 transition">
+                Create Listing
+            </button>
+        </div>
+    </form>
+</section>
+
+<!-- Compressor.js for image compression -->
+<script src="https://unpkg.com/compressorjs@1.2.1/dist/compressor.min.js"></script>
+<script>
+    // Store compressed files to replace input.files
+    const compressedFiles = {
+        image1: null,
+        image2: null,
+        image3: null
+    };
+
+    function previewImage(input, previewId) {
+        const preview = document.getElementById(previewId);
+        const field = input.name; // Get the input field name (image1, image2, image3)
+        if (input.files && input.files[0]) {
+            new Compressor(input.files[0], {
+                quality: 0.8, // 80% quality for good balance
+                maxWidth: 1920, // Max width 1920px
+                maxHeight: 1080, // Max height 1080px
+                mimeType: 'image/jpeg', // Convert to JPEG for consistency
+                success(result) {
+                    // Store compressed file
+                    compressedFiles[field] = result;
+                    // Update preview
+                    const reader = new FileReader();
+                    reader.onload = e => {
+                        preview.src = e.target.result;
+                        preview.classList.remove('hidden');
+                    };
+                    reader.readAsDataURL(result);
+                },
+                error(err) {
+                    console.error('Compression error:', err);
+                    preview.classList.add('hidden');
+                }
+            });
+        } else {
+            compressedFiles[field] = null;
+            preview.classList.add('hidden');
+        }
+    }
+
+    // Intercept form submission to use compressed files
+    document.getElementById('listingForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const loading = document.getElementById('loading');
+        loading.classList.remove('hidden');
+
+        const form = e.target;
+        const formData = new FormData();
+
+        // Append text fields
+        ['name', 'type', 'category', 'description', 'location', 'listingType'].forEach(field => {
+            const value = form.querySelector(`[name="${field}"]`).value;
+            if (value) formData.append(field, value);
+        });
+
+        // Append compressed image files
+        ['image1', 'image2', 'image3'].forEach(field => {
+            if (compressedFiles[field]) {
+                formData.append(field, compressedFiles[field], compressedFiles[field].name);
+            }
+        });
+
+        try {
+            const response = await fetch('/admin/listings', {
+                method: 'POST',
+                body: formData
+            });
+            if (response.ok) {
+                window.location.href = '/admin/listings';
+            } else {
+                throw new Error('Upload failed');
+            }
+        } catch (err) {
+            console.error('Upload error:', err);
+            loading.innerText = 'Error uploading. Please try again.';
+        }
+    });
+</script>

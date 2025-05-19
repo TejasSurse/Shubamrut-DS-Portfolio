@@ -1,0 +1,186 @@
+<% layout('/layouts/boilerplate2') -%>
+<% title="Edit Listing | Admin Dashboard" %>
+
+<section class="p-8 mt-1">
+    <h1 class="text-3xl font-bold text-gray-800 mb-6">Edit Listing</h1>
+
+    <form id="editForm" action="/admin/listings/<%= listing._id %>?_method=PUT" method="POST" enctype="multipart/form-data" class="bg-white p-6 rounded-lg shadow space-y-6">
+        <!-- Name -->
+        <div>
+            <label class="block text-gray-700 font-medium mb-2">Name</label>
+            <input type="text" name="name" value="<%= listing.Name %>" required class="w-full p-3 border border-gray-300 rounded" />
+        </div>
+
+        <!-- Type -->
+        <div>
+            <label class="block text-gray-700 font-medium mb-2">Type</label>
+            <select name="type" required class="w-full p-3 border border-gray-300 rounded">
+                <option value="">Select Type</option>
+                <option value="Interior" <%= listing.type === 'Interior' ? 'selected' : '' %>>Interior</option>
+                <option value="Exterior" <%= listing.type === 'Exterior' ? 'selected' : '' %>>Exterior</option>
+            </select>
+        </div>
+
+        <!-- Category -->
+        <div>
+            <label class="block text-gray-700 font-medium mb-2">Category</label>
+            <select name="category" required class="w-full p-3 border border-gray-300 rounded">
+                <option value="">Select Category</option>
+                <option value="Floor Plan" <%= listing.category === 'Floor Plan' ? 'selected' : '' %>>Floor Plan</option>
+                <option value="Cut Section" <%= listing.category === 'Cut Section' ? 'selected' : '' %>>Cut Section</option>
+                <option value="3D Elevation" <%= listing.category === '3D Elevation' ? 'selected' : '' %>>3D Elevation</option>
+                <option value="Interior Design" <%= listing.category === 'Interior Design' ? 'selected' : '' %>>Interior Design</option>
+            </select>
+        </div>
+
+        <!-- Existing Images -->
+        <div>
+            <label class="block text-gray-700 font-medium mb-2">Current Images</label>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-4">
+                <% listing.images.forEach((image, index) => { %>
+                    <div>
+                        <img src="<%= image.url %>" alt="Image <%= index + 1 %>" class="w-full h-24 object-cover rounded">
+                        <label class="flex items-center mt-2">
+                            <input type="checkbox" name="deleteImages[]" value="<%= image.filename %>" class="mr-2">
+                            Delete Image <%= index + 1 %>
+                        </label>
+                    </div>
+                <% }) %>
+            </div>
+        </div>
+
+        <!-- New Image Fields with Preview -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div>
+                <label class="block text-gray-700 font-medium mb-2">New Image 1</label>
+                <input type="file" name="image1" accept="image/*" class="w-full p-2 border border-gray-300 rounded" onchange="previewImage(this, 'preview1')" />
+                <img id="preview1" class="mt-2 w-[100px] h-[100px] object-cover border rounded hidden" />
+            </div>
+            <div>
+                <label class="block text-gray-700 font-medium mb-2">New Image 2</label>
+                <input type="file" name="image2" accept="image/*" class="w-full p-2 border border-gray-300 rounded" onchange="previewImage(this, 'preview2')" />
+                <img id="preview2" class="mt-2 w-[100px] h-[100px] object-cover border rounded hidden" />
+            </div>
+            <div>
+                <label class="block text-gray-700 font-medium mb-2">New Image 3</label>
+                <input type="file" name="image3" accept="image/*" class="w-full p-2 border border-gray-300 rounded" onchange="previewImage(this, 'preview3')" />
+                <img id="preview3" class="mt-2 w-[100px] h-[100px] object-cover border rounded hidden" />
+            </div>
+        </div>
+
+        <!-- Description -->
+        <div>
+            <label class="block text-gray-700 font-medium mb-2">Description</label>
+            <textarea name="description" rows="4" required class="w-full p-3 border border-gray-300 rounded"><%= listing.description %></textarea>
+        </div>
+
+        <!-- Location -->
+        <div>
+            <label class="block text-gray-700 font-medium mb-2">Location</label>
+            <input type="text" name="location" value="<%= listing.location %>" required class="w-full p-3 border border-gray-300 rounded" />
+        </div>
+
+        <!-- Listing Type -->
+        <div>
+            <label class="block text-gray-700 font-medium mb-2">Listing Type</label>
+            <select name="listingType" required class="w-full p-3 border border-gray-300 rounded">
+                <option value="">Select Listing Type</option>
+                <option value="Gallery" <%= listing.ListingType === 'gallery' ? 'selected' : '' %>>Gallery</option>
+                <option value="Projects" <%= listing.ListingType === 'projects' ? 'selected' : '' %>>Projects</option>
+                <option value="Both" <%= listing.ListingType === 'both' ? 'selected' : '' %>>Both</option>
+            </select>
+        </div>
+
+        <!-- Loading Indicator -->
+        <div id="loading" class="hidden text-gray-700">Uploading...</div>
+
+        <!-- Submit Button -->
+        <div class="pt-4">
+            <button type="submit" class="bg-blue-600 text-white px-6 py-3 rounded hover:bg-blue-700 transition">
+                Update Listing
+            </button>
+        </div>
+    </form>
+</section>
+
+<!-- Compressor.js for image compression -->
+<script src="https://unpkg.com/compressorjs@1.2.1/dist/compressor.min.js"></script>
+<script>
+    // Store compressed files
+    const compressedFiles = {
+        image1: null,
+        image2: null,
+        image3: null
+    };
+
+    function previewImage(input, previewId) {
+        const preview = document.getElementById(previewId);
+        const field = input.name;
+        if (input.files && input.files[0]) {
+            new Compressor(input.files[0], {
+                quality: 0.8,
+                maxWidth: 1920,
+                maxHeight: 1080,
+                mimeType: 'image/jpeg',
+                success(result) {
+                    compressedFiles[field] = result;
+                    const reader = new FileReader();
+                    reader.onload = e => {
+                        preview.src = e.target.result;
+                        preview.classList.remove('hidden');
+                    };
+                    reader.readAsDataURL(result);
+                },
+                error(err) {
+                    console.error('Compression error:', err);
+                    preview.classList.add('hidden');
+                }
+            });
+        } else {
+            compressedFiles[field] = null;
+            preview.classList.add('hidden');
+        }
+    }
+
+    // Intercept form submission
+    document.getElementById('editForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const loading = document.getElementById('loading');
+        loading.classList.remove('hidden');
+
+        const form = e.target;
+        const formData = new FormData();
+
+        // Append text fields
+        ['name', 'type', 'category', 'description', 'location', 'listingType'].forEach(field => {
+            const value = form.querySelector(`[name="${field}"]`).value;
+            if (value) formData.append(field, value);
+        });
+
+        // Append deleteImages checkboxes
+        const deleteImages = form.querySelectorAll('input[name="deleteImages[]"]:checked');
+        deleteImages.forEach(input => formData.append('deleteImages[]', input.value));
+
+        // Append compressed image files
+        ['image1', 'image2', 'image3'].forEach(field => {
+            if (compressedFiles[field]) {
+                formData.append(field, compressedFiles[field], compressedFiles[field].name);
+            }
+        });
+
+        try {
+            const response = await fetch(form.action, {
+                method: 'POST', // method-override converts to PUT
+                body: formData
+            });
+            if (response.ok) {
+                window.location.href = '/admin/listings';
+            } else {
+                throw new Error('Update failed');
+            }
+        } catch (err) {
+            console.error('Update error:', err);
+            loading.innerText = 'Error updating. Please try again.';
+        }
+    });
+</script>

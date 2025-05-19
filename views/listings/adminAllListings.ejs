@@ -1,0 +1,33 @@
+<% layout('/layouts/boilerplate2') -%>
+<% title="All Listings | Admin Dashboard" %>
+
+<section class="p-8">
+    <h1 class="text-3xl font-bold text-gray-800 mb-6">All Listings</h1>
+    <div class="bg-white p-6 rounded-lg shadow">
+        <% if (listings && listings.length > 0) { %>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <% listings.forEach(listing => { %>
+                    <a href="/admin/listings/show/<%= listing._id %>" class="block bg-gray-100 rounded-lg overflow-hidden hover:shadow-lg transition">
+                        <div class="h-48">
+                            <% if (listing.images && listing.images.length > 0) { %>
+                                <img src="<%= listing.images[0].url %>" alt="<%= listing.Name %>" class="w-full h-full object-cover">
+                            <% } else { %>
+                                <div class="w-full h-full bg-gray-200 flex items-center justify-center">
+                                    <span class="text-gray-500">No Image</span>
+                                </div>
+                            <% } %>
+                        </div>
+                        <div class="p-4">
+                            <h2 class="text-xl font-semibold text-gray-800"><%= listing.Name %></h2>
+                            <p class="text-gray-600"><%= listing.category %> | <%= listing.type %></p>
+                            <p class="text-gray-600">Location: <%= listing.location %></p>
+                            <p class="text-gray-600">Listing Type: <%= listing.ListingType %></p>
+                        </div>
+                    </a>
+                <% }) %>
+            </div>
+        <% } else { %>
+            <p class="text-gray-600">No listings available.</p>
+        <% } %>
+    </div>
+</section>

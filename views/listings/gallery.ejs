@@ -1,0 +1,150 @@
+<% layout('/layouts/boilerplate') -%>
+<% title="Gallery | Shubamrut Designing Studio" %>
+
+<main class="pt-32 p-4 sm:p-8 bg-gray-100 min-h-screen">
+    <div class="max-w-screen-xl mx-auto">
+        <h1 class="text-4xl font-bold text-gray-900 mb-8 text-center animate-fade-in">Our Gallery</h1>
+
+        <div class="flex flex-col lg:flex-row gap-8">
+            <!-- Sidebar: Filters -->
+            <aside id="filterSidebar" class="lg:w-1/4 bg-white p-6 rounded-md shadow-lg transition-all duration-300 ease-in-out lg:block hidden">
+                <h2 class="text-2xl font-semibold text-gray-900 mb-6">Filters</h2>
+                <div class="space-y-6">
+                    <div>
+                        <label class="block text-gray-700 font-medium mb-2">Type</label>
+                        <select id="typeFilter" class="w-full p-3 border border-gray-300 rounded focus:ring-2 focus:ring-blue-600 transition">
+                            <option value="" <%= !type ? 'selected' : '' %>>All Types</option>
+                            <option value="Interior" <%= type === 'Interior' ? 'selected' : '' %>>Interior</option>
+                            <option value="Exterior" <%= type === 'Exterior' ? 'selected' : '' %>>Exterior</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-gray-700 font-medium mb-2">Category</label>
+                        <select id="categoryFilter" class="w-full p-3 border border-gray-300 rounded focus:ring-2 focus:ring-blue-600 transition">
+                            <option value="" <%= !category ? 'selected' : '' %>>All Categories</option>
+                            <option value="Floor Plan" <%= category === 'Floor Plan' ? 'selected' : '' %>>Floor Plan</option>
+                            <option value="Cut Section" <%= category === 'Cut Section' ? 'selected' : '' %>>Cut Section</option>
+                            <option value="3D Elevation" <%= category === '3D Elevation' ? 'selected' : '' %>>3D Elevation</option>
+                            <option value="Interior Design" <%= category === 'Interior Design' ? 'selected' : '' %>>Interior Design</option>
+                        </select>
+                    </div>
+                    <button id="applyFilters" class="w-full bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition transform hover:scale-105">
+                        Apply Filters
+                    </button>
+                </div>
+            </aside>
+
+            <!-- Mobile Filter Toggle -->
+            <div class="lg:hidden">
+                <button-Item id="toggleFilters" class="flex items-center justify-between w-full bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition">
+                    <span>Filters</span>
+                    <svg id="toggleArrow" class="w-5 h-5 transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                    </svg>
+                </button>
+                <div id="mobileFilters" class="hidden mt-2 bg-white p-6 rounded-md shadow-lg">
+                    <div class="space-y-6">
+                        <div>
+                            <label class="block text-gray-700 font-medium mb-2">Type</label>
+                            <select id="typeFilterMobile" class="w-full p-3 border border-gray-300 rounded focus:ring-2 focus:ring-blue-600 transition">
+                                <option value="" <%= !type ? 'selected' : '' %>>All Types</option>
+                                <option value="Interior" <%= type === 'Interior' ? 'selected' : '' %>>Interior</option>
+                                <option value="Exterior" <%= type === 'Exterior' ? 'selected' : '' %>>Exterior</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-gray-700 font-medium mb-2">Category</label>
+                            <select id="categoryFilterMobile" class="w-full p-3 border border-gray-300 rounded focus:ring-2 focus:ring-blue-600 transition">
+                                <option value="" <%= !category ? 'selected' : '' %>>All Categories</option>
+                                <option value="Floor Plan" <%= category === 'Floor Plan' ? 'selected' : '' %>>Floor Plan</option>
+                                <option value="Cut Section" <%= category === 'Cut Section' ? 'selected' : '' %>>Cut Section</option>
+                                <option value="3D Elevation" <%= category === '3D Elevation' ? 'selected' : '' %>>3D Elevation</option>
+                                <option value="Interior Design" <%= category === 'Interior Design' ? 'selected' : '' %>>Interior Design</option>
+                            </select>
+                        </div>
+                        <button id="applyFiltersMobile" class="w-full bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition transform hover:scale-105">
+                            Apply Filters
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Listings Grid -->
+            <div class="lg:w-3/4">
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <% if (listings && Array.isArray(listings) && listings.length > 0) { %>
+                        <% listings.forEach((listing, index) => { %>
+                            <a href="/listings/<%= listing._id %>" class="block bg-white rounded-md overflow-hidden shadow-lg hover:shadow-xl transition transform hover:scale-105 animate-fade-in" style="animation-delay: <%= index * 0.1 %>s;">
+                                <div class="h-80 relative">
+                                    <% if (listing.images && Array.isArray(listing.images) && listing.images.length > 0) { %>
+                                        <img src="<%= listing.images[0].url %>" alt="<%= listing.Name || 'Listing' %>" class="w-full h-full object-cover transition-transform duration-300 hover:scale-110">
+                                    <% } else { %>
+                                        <div class="w-full h-full bg-gray-200 flex items-center justify-center">
+                                            <span class="text-gray-500">No Image</span>
+                                        </div>
+                                    <% } %>
+                                </div>
+                                <div class="p-6">
+                                    <h2 class="text-xl font-semibold text-gray-900 truncate"><%= listing.Name || 'Unnamed Listing' %></h2>
+                                </div>
+                            </a>
+                        <% }) %>
+                    <% } else { %>
+                        <p class="text-center text-gray-600 col-span-full animate-fade-in">No listings found.</p>
+                    <% } %>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<style>
+    @keyframes fade-in {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+    .animate-fade-in {
+        animation: fade-in 0.5s ease-out forwards;
+    }
+</style>
+
+<script>
+    // Toggle mobile filters
+    const toggleButton = document.getElementById('toggleFilters');
+    const mobileFilters = document.getElementById('mobileFilters');
+    const toggleArrow = document.getElementById('toggleArrow');
+    toggleButton.addEventListener('click', () => {
+        mobileFilters.classList.toggle('hidden');
+        toggleArrow.classList.toggle('rotate-180');
+        // Sync mobile and desktop filters
+        document.getElementById('typeFilterMobile').value = document.getElementById('typeFilter').value;
+        document.getElementById('categoryFilterMobile').value = document.getElementById('categoryFilter').value;
+    });
+
+    // Sync mobile filters to desktop
+    document.getElementById('typeFilterMobile').addEventListener('change', () => {
+        document.getElementById('typeFilter').value = document.getElementById('typeFilterMobile').value;
+    });
+    document.getElementById('categoryFilterMobile').addEventListener('change', () => {
+        document.getElementById('categoryFilter').value = document.getElementById('categoryFilterMobile').value;
+    });
+
+    // Apply filters
+    function applyFilters() {
+        const type = document.getElementById('typeFilter').value;
+        const category = document.getElementById('categoryFilter').value;
+        const url = new URL(window.location);
+        url.searchParams.set('type', type);
+        url.searchParams.set('category', category);
+        if (!type) url.searchParams.delete('type');
+        if (!category) url.searchParams.delete('category');
+        window.location = url;
+    }
+
+    document.getElementById('applyFilters').addEventListener('click', applyFilters);
+    document.getElementById('applyFiltersMobile').addEventListener('click', () => {
+        document.getElementById('typeFilter').value = document.getElementById('typeFilterMobile').value;
+        document.getElementById('categoryFilter').value = document.getElementById('categoryFilterMobile').value;
+        applyFilters();
+    });
+</script>
