@@ -1,9 +1,9 @@
 <% layout('/layouts/boilerplate') -%>
-<% title="Gallery | Shubamrut Designing Studio" %>
+<% title="Projects | Shubamrut Designing Studio" %>
 
 <main class="pt-10 lg:pt-20 p-4 sm:p-8 bg-gray-100 min-h-screen">
     <div class="max-w-screen-xl mx-auto">
-        <h1 class="text-4xl font-bold text-gray-900 mb-8 text-center animate-fade-in">Our Gallery</h1>
+        <h1 class="text-4xl font-bold text-gray-900 mb-8 text-center animate-fade-in">Our Projects</h1>
 
         <div class="flex flex-col lg:flex-row gap-8">
             <!-- Sidebar: Filters -->
@@ -69,15 +69,15 @@
                 </div>
             </div>
 
-            <!-- Listings Grid -->
+            <!-- Projects Grid -->
             <div class="lg:w-3/4">
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                    <% if (listings && Array.isArray(listings) && listings.length > 0) { %>
-                        <% listings.forEach((listing, index) => { %>
-                            <a href="/listings/<%= listing._id %>" class="block bg-white rounded-md overflow-hidden shadow-lg hover:shadow-xl transition transform hover:scale-105 animate-fade-in" style="animation-delay: <%= index * 0.1 %>s;">
+                    <% if (projects && Array.isArray(projects) && projects.length > 0) { %>
+                        <% projects.forEach((project, index) => { %>
+                            <a href="/listings/<%= project._id %>" class="block bg-white rounded-md overflow-hidden shadow-lg hover:shadow-xl transition transform hover:scale-105 animate-fade-in" style="animation-delay: <%= index * 0.1 %>s;">
                                 <div class="h-80 relative">
-                                    <% if (listing.images && Array.isArray(listing.images) && listing.images.length > 0) { %>
-                                        <img src="<%= listing.images[0].url %>" alt="<%= listing.Name || 'Listing' %>" class="w-full h-full object-cover transition-transform duration-300 hover:scale-110">
+                                    <% if (project.images && Array.isArray(project.images) && project.images.length > 0) { %>
+                                        <img src="<%= project.images[0].url %>" alt="<%= project.Name || 'Project' %>" class="w-full h-full object-cover transition-transform duration-300 hover:scale-110">
                                     <% } else { %>
                                         <div class="w-full h-full bg-gray-200 flex items-center justify-center">
                                             <span class="text-gray-500">No Image</span>
@@ -85,12 +85,12 @@
                                     <% } %>
                                 </div>
                                 <div class="p-6">
-                                    <h2 class="text-xl font-semibold text-gray-900 truncate"><%= listing.Name || 'Unnamed Listing' %></h2>
+                                    <h2 class="text-xl font-semibold text-gray-900 truncate"><%= project.Name || 'Unnamed Project' %></h2>
                                 </div>
                             </a>
                         <% }) %>
                     <% } else { %>
-                        <p class="text-center text-gray-600 col-span-full animate-fade-in">No listings found.</p>
+                        <p class="text-center text-gray-600 col-span-full animate-fade-in">No projects found.</p>
                     <% } %>
                 </div>
             </div>

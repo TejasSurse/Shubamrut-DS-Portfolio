@@ -1,11 +1,11 @@
 <% layout('/layouts/boilerplate') -%>
 <% title=(listing && listing.Name ? listing.Name : 'Listing') + " | Shubamrut Designing Studio" %>
 
-<main class="pt-32 p-4 sm:p-8 bg-gray-100 min-h-screen">
+<main class="pt-16 sm:pt-24 md:pt-32 p-4 sm:p-8 bg-gray-100 min-h-screen">
     <div class="max-w-screen-xl mx-auto">
         <% if (listing) { %>
             <div class="bg-white p-6 rounded-md shadow-lg animate-fade-in">
-                <h1 class="text-4xl font-bold text-gray-900 mb-8"><%= listing.Name || 'Unnamed Listing' %></h1>
+                <h1 class="text-4xl font-bold text-gray-900 mb-8 pt-4 sm:pt-8 md:pt-12 lg:pt-16"><%= listing.Name || 'Unnamed Listing' %></h1>
                 <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
                     <!-- Images -->
                     <div class="lg:col-span-2">
@@ -43,7 +43,7 @@
             </div>
         <% } else { %>
             <div class="bg-white p-6 rounded-md shadow-lg animate-fade-in">
-                <h1 class="text-4xl font-bold text-gray-900 mb-8">Listing Not Found</h1>
+                <h1 class="text-4xl font-bold text-gray-900 mb-8 pt-4 sm:pt-8 md:pt-12 lg:pt-16">Listing Not Found</h1>
                 <p class="text-gray-600 mb-4">The requested listing could not be found.</p>
                 <a href="/gallery" class="inline-block bg-blue-600 text-white px-6 py-3 rounded hover:bg-blue-700 transition transform hover:scale-105">
                     Back to Gallery

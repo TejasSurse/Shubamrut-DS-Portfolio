@@ -11,6 +11,7 @@ const Listing = require('./models/listing.model.js');
 const fs = require('fs');
 const methodOverride = require('method-override');
 
+
 const app = express();
 const connectDB = require("./db/db.js");
 
@@ -35,8 +36,8 @@ const transporter = nodeMailer.createTransport({
   host: "smtp.gmail.com",
   port: 465,
   auth: {
-    user: process.env.EMAIL_ID,
-    pass: process.env.EMAIL_PASS
+    user: "punnyaeeconstruction@gmail.com",
+    pass: "vgldszkavhiqpwxp",
   },
 });
 
@@ -61,8 +62,10 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage });
 
 // Middleware
+app.use(express.urlencoded({ extended: true }));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
+app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(methodOverride('_method'));
 
@@ -84,13 +87,64 @@ app.get("/contact", (req, res) => {
   res.render("listings/contact");
 });
 
+app.post("/contact", async (req, res) => {
+  console.log("req recieved");
+  console.log(req.body);
+  const { name, phone, email, subject, message } = req.body;
+  console.log(req.body);
+  if (!name || !phone) {
+    return res.status(400).json({ error: "Name and phone are required." });
+  }
+
+  try {
+    const transporter = nodeMailer.createTransport({
+      service: 'gmail',
+      auth: {
+        user: 'punnyaeeconstruction@gmail.com',
+        pass: 'vgldszkavhiqpwxp'
+      }
+    });
+
+    const mailOptions = {
+      from: '"Shubamrut Contact Form" <punnyaeeconstruction@gmail.com>',
+      to: 'shubhamrut16@gmail.com',
+      subject: subject || 'New Contact Form Submission',
+      html: `
+        <div style="font-family: Arial, sans-serif; background-color: #f9f9ff; padding: 20px; border-radius: 8px; color: #333;">
+          <h2 style="color: #5B21B6;">📩 New Contact Form Submission</h2>
+          <div style="margin-top: 10px; padding: 15px; background: white; border-radius: 6px; box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
+            <p><strong>👤 Name:</strong> ${name}</p>
+            <p><strong>📞 Phone:</strong> ${phone}</p>
+            ${email ? `<p><strong>✉️ Email:</strong> ${email}</p>` : ''}
+            ${subject ? `<p><strong>📌 Subject:</strong> ${subject}</p>` : ''}
+            ${message ? `<p><strong>💬 Message:</strong><br><span style="white-space: pre-line;">${message}</span></p>` : ''}
+          </div>
+          <div style="margin-top: 30px; text-align: center; color: #888; font-size: 13px;">
+            <p>Sent from <strong>Shubamrut Designing Studio</strong></p>
+            <p>📍 Garkheda, Chhatrapati Sambhaji Nagar | ☎ +91 98908 86002</p>
+            <div style="margin-top: 10px;">
+              <a href="#" style="margin: 0 8px; color: #E1306C;">Instagram</a> |
+              <a href="#" style="margin: 0 8px; color: #1877F2;">Facebook</a> |
+              <a href="#" style="margin: 0 8px; color: #0077B5;">LinkedIn</a>
+            </div>
+          </div>
+        </div>
+      `
+    };
+
+    await transporter.sendMail(mailOptions);
+    res.status(200).json({ success: true, message: "Message sent successfully!" });
+  } catch (error) {
+    console.error("Error sending email:", error);
+    res.status(500).json({ success: false, error: "Failed to send message." });
+  }
+});
+
 app.get("/about", (req, res) => {
   res.render("listings/about");
 });
 
-app.get("/projects", (req, res) => {
-  res.render("listings/unc");
-});
+
 
 app.get("/gallery", async (req, res) => {
   try {
@@ -108,12 +162,27 @@ app.get("/gallery", async (req, res) => {
   }
 });
 
+app.get("/projects", async (req, res) => {
+  try {
+    const { type, category } = req.query;
+    const query = {
+      ListingType: { $in: ['projects'] }
+    };
+    if (type) query.type = type;
+    if (category) query.category = category;
+    const projects = await Listing.find(query).select('Name type category images location description');
+    res.render("listings/projects", { projects, type, category });
+  } catch (error) {
+    console.error("Error fetching project listings:", error);
+    res.render("listings/error", { title: "Failed to load projects. Please try again later." });
+  }
+});
 
 
 app.get("/listings/:id", async (req, res) => {
   try {
     const listing = await Listing.findById(req.params.id);
-    if (!listing || !['gallery', 'both'].includes(listing.ListingType)) {
+    if (!listing || !['gallery', 'both', 'projects'].includes(listing.ListingType)) {
       return res.render("listings/error", { title: "Listing not found or not available in gallery." });
     }
     res.render("listings/listingShow", { listing });
