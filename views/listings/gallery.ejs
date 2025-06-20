@@ -3,97 +3,61 @@
 
 <main class="pt-10 lg:pt-20 p-4 sm:p-8 bg-gray-100 min-h-screen">
     <div class="max-w-screen-xl mx-auto">
-        <h1 class="text-4xl font-bold text-gray-900 mb-8 text-center animate-fade-in">Our Gallery</h1>
+        <h1 class="text-4xl font-bold text-gray-900 mb-12 text-center animate-fade-in">Explore Our Design Categories</h1>
 
-        <div class="flex flex-col lg:flex-row gap-8">
-            <!-- Sidebar: Filters -->
-            <aside id="filterSidebar" class="lg:w-1/4 bg-white p-6 rounded-md shadow-lg transition-all duration-300 ease-in-out lg:block hidden">
-                <h2 class="text-2xl font-semibold text-gray-900 mb-6">Filters</h2>
-                <div class="space-y-6">
-                    <div>
-                        <label class="block text-gray-700 font-medium mb-2">Type</label>
-                        <select id="typeFilter" class="w-full p-3 border border-gray-300 rounded focus:ring-2 focus:ring-blue-600 transition">
-                            <option value="" <%= !type ? 'selected' : '' %>>All Types</option>
-                            <option value="Interior" <%= type === 'Interior' ? 'selected' : '' %>>Interior</option>
-                            <option value="Exterior" <%= type === 'Exterior' ? 'selected' : '' %>>Exterior</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label class="block text-gray-700 font-medium mb-2">Category</label>
-                        <select id="categoryFilter" class="w-full p-3 border border-gray-300 rounded focus:ring-2 focus:ring-blue-600 transition">
-                            <option value="" <%= !category ? 'selected' : '' %>>All Categories</option>
-                            <option value="Floor Plan" <%= category === 'Floor Plan' ? 'selected' : '' %>>Floor Plan</option>
-                            <option value="Cut Section" <%= category === 'Cut Section' ? 'selected' : '' %>>Cut Section</option>
-                            <option value="3D Elevation" <%= category === '3D Elevation' ? 'selected' : '' %>>3D Elevation</option>
-                            <option value="Interior Design" <%= category === 'Interior Design' ? 'selected' : '' %>>Interior Design</option>
-                        </select>
-                    </div>
-                    <button id="applyFilters" class="w-full bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition transform hover:scale-105">
-                        Apply Filters
-                    </button>
-                </div>
-            </aside>
-
-            <!-- Mobile Filter Toggle -->
-            <div class="lg:hidden">
-                <button id="toggleFilters" class="flex items-center justify-between w-full bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition">
-                    <span>Filters</span>
-                    <svg id="toggleArrow" class="w-5 h-5 transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-                    </svg>
-                </button>
-                <div id="mobileFilters" class="hidden mt-2 bg-white p-6 rounded-md shadow-lg">
-                    <div class="space-y-6">
-                        <div>
-                            <label class="block text-gray-700 font-medium mb-2">Type</label>
-                            <select id="typeFilterMobile" class="w-full p-3 border border-gray-300 rounded focus:ring-2 focus:ring-blue-600 transition">
-                                <option value="" <%= !type ? 'selected' : '' %>>All Types</option>
-                                <option value="Interior" <%= type === 'Interior' ? 'selected' : '' %>>Interior</option>
-                                <option value="Exterior" <%= type === 'Exterior' ? 'selected' : '' %>>Exterior</option>
-                            </select>
+        <!-- Filter Cards -->
+        <div id="filterSection" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+            <% const filterCards = [
+                { name: 'Living Hall', image: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c', category: 'Living Hall' },
+                { name: 'Kitchen', image: 'https://images.unsplash.com/photo-1600585153490-76fb20a0f2b8', category: 'Kitchen' },
+                { name: 'Bedroom', image: 'https://images.unsplash.com/photo-1618220179428-22790b461013', category: 'Bedroom' },
+                { name: 'Child Bedroom', image: 'https://images.unsplash.com/photo-1616594039964-ae97d8a7c8b9', category: 'Child Bedroom' },
+                { name: 'Washroom', image: 'https://images.unsplash.com/photo-1600585152915-28a668a6b943', category: 'Washroom' },
+                { name: 'Dining Area', image: 'https://images.unsplash.com/photo-1600585154526-990dced4db0d', category: 'Dining Area' },
+                { name: 'Home Theater', image: 'https://images.unsplash.com/photo-1598546720078-8659860b0549', category: 'Home Theater' },
+                { name: 'Pooja Room', image: 'https://images.unsplash.com/photo-1611262588024-d12430b98920', category: 'Pooja Room' },
+                { name: 'Cut Section', image: 'https://images.unsplash.com/photo-1582266255769-4f6f7f1b8b5a', category: 'Cut Section' }
+            ] %>
+            <% filterCards.forEach(card => { %>
+                <div class="filter-card bg-white rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition transform hover:scale-105 cursor-pointer animate-fade-in" data-category="<%= card.category %>">
+                    <div class="h-64 relative">
+                        <img src="<%= card.image %>" alt="<%= card.name %>" class="w-full h-full object-cover transition-transform duration-300 hover:scale-110">
+                        <div class="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center">
+                            <h2 class="text-2xl font-semibold text-white text-center"><%= card.name %></h2>
                         </div>
-                        <div>
-                            <label class="block text-gray-700 font-medium mb-2">Category</label>
-                            <select id="categoryFilterMobile" class="w-full p-3 border border-gray-300 rounded focus:ring-2 focus:ring-blue-600 transition">
-                                <option value="" <%= !category ? 'selected' : '' %>>All Categories</option>
-                                <option value="Floor Plan" <%= category === 'Floor Plan' ? 'selected' : '' %>>Floor Plan</option>
-                                <option value="Cut Section" <%= category === 'Cut Section' ? 'selected' : '' %>>Cut Section</option>
-                                <option value="3D Elevation" <%= category === '3D Elevation' ? 'selected' : '' %>>3D Elevation</option>
-                                <option value="Interior Design" <%= category === 'Interior Design' ? 'selected' : '' %>>Interior Design</option>
-                            </select>
-                        </div>
-                        <button id="applyFiltersMobile" class="w-full bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition transform hover:scale-105">
-                            Apply Filters
-                        </button>
                     </div>
                 </div>
-            </div>
+            <% }) %>
+        </div>
 
-            <!-- Listings Grid -->
-            <div class="lg:w-3/4">
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                    <% if (listings && Array.isArray(listings) && listings.length > 0) { %>
-                        <% listings.forEach((listing, index) => { %>
-                            <a href="/listings/<%= listing._id %>" class="block bg-white rounded-md overflow-hidden shadow-lg hover:shadow-xl transition transform hover:scale-105 animate-fade-in" style="animation-delay: <%= index * 0.1 %>s;">
-                                <div class="h-80 relative">
-                                    <% if (listing.images && Array.isArray(listing.images) && listing.images.length > 0) { %>
-                                        <img src="<%= listing.images[0].url %>" alt="<%= listing.Name || 'Listing' %>" class="w-full h-full object-cover transition-transform duration-300 hover:scale-110">
-                                    <% } else { %>
-                                        <div class="w-full h-full bg-gray-200 flex items-center justify-center">
-                                            <span class="text-gray-500">No Image</span>
-                                        </div>
-                                    <% } %>
-                                </div>
-                                <div class="p-6">
-                                    <h2 class="text-xl font-semibold text-gray-900 truncate"><%= listing.Name || 'Unnamed Listing' %></h2>
-                                </div>
-                            </a>
-                        <% }) %>
-                    <% } else { %>
-                        <p class="text-center text-gray-600 col-span-full animate-fade-in">No listings found.</p>
-                    <% } %>
-                </div>
+        <!-- Listings Section -->
+        <div id="listingsSection" class="hidden">
+            <h2 id="selectedCategory" class="text-3xl font-semibold text-gray-900 mb-8 text-center animate-fade-in"></h2>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                <% if (listings && Array.isArray(listings) && listings.length > 0) { %>
+                    <% listings.forEach((listing, index) => { %>
+                        <a href="/listings/<%= listing._id %>" class="block bg-white rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition transform hover:scale-105 animate-fade-in" style="animation-delay: <%= index * 0.1 %>s;">
+                            <div class="h-80 relative">
+                                <% if (listing.images && Array.isArray(listing.images) && listing.images.length > 0) { %>
+                                    <img src="<%= listing.images[0].url %>" alt="<%= listing.Name || 'Listing' %>" class="w-full h-full object-cover transition-transform duration-300 hover:scale-110">
+                                <% } else { %>
+                                    <div class="w-full h-full bg-gray-200 flex items-center justify-center">
+                                        <span class="text-gray-500 text-lg font-medium">No Image Available</span>
+                                    </div>
+                                <% } %>
+                            </div>
+                            <div class="p-6">
+                                <h3 class="text-xl font-semibold text-gray-900 truncate"><%= listing.Name || 'Unnamed Listing' %></h3>
+                            </div>
+                        </a>
+                    <% }) %>
+                <% } else { %>
+                    <div class="col-span-full bg-white rounded-lg shadow-lg p-8 text-center animate-fade-in">
+                        <p class="text-xl text-gray-600">No listings found under this category.</p>
+                    </div>
+                <% } %>
             </div>
+            <button id="backToFilters" class="mt-8 w-full sm:w-auto bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition transform hover:scale-105">Back to Categories</button>
         </div>
     </div>
 </main>
@@ -109,59 +73,47 @@
 </style>
 
 <script>
-    // Toggle mobile filters
-    const toggleButton = document.getElementById('toggleFilters');
-    const mobileFilters = document.getElementById('mobileFilters');
-    const toggleArrow = document.getElementById('toggleArrow');
+    // Get DOM elements
+    const filterCards = document.querySelectorAll('.filter-card');
+    const filterSection = document.getElementById('filterSection');
+    const listingsSection = document.getElementById('listingsSection');
+    const selectedCategory = document.getElementById('selectedCategory');
+    const backToFilters = document.getElementById('backToFilters');
 
-    toggleButton.addEventListener('click', () => {
-        mobileFilters.classList.toggle('hidden');
-        toggleArrow.classList.toggle('rotate-180');
-        // Sync mobile to desktop filters on toggle
-        document.getElementById('typeFilterMobile').value = document.getElementById('typeFilter').value;
-        document.getElementById('categoryFilterMobile').value = document.getElementById('categoryFilter').value;
-    });
+    // Handle filter card click
+    filterCards.forEach(card => {
+        card.addEventListener('click', () => {
+            const category = card.dataset.category;
+            const url = new URL(window.location);
 
-    // Sync mobile to desktop filters on change
-    document.getElementById('typeFilterMobile').addEventListener('change', () => {
-        document.getElementById('typeFilter').value = document.getElementById('typeFilterMobile').value;
-    });
-    document.getElementById('categoryFilterMobile').addEventListener('change', () => {
-        document.getElementById('categoryFilter').value = document.getElementById('categoryFilterMobile').value;
-    });
+            // Update URL parameters
+            if (category) {
+                url.searchParams.set('category', category);
+            } else {
+                url.searchParams.delete('category');
+            }
 
-    // Sync desktop to mobile filters on change
-    document.getElementById('typeFilter').addEventListener('change', () => {
-        document.getElementById('typeFilterMobile').value = document.getElementById('typeFilter').value;
-    });
-    document.getElementById('categoryFilter').addEventListener('change', () => {
-        document.getElementById('categoryFilterMobile').value = document.getElementById('categoryFilter').value;
+            // Set selected category name
+            selectedCategory.textContent = card.querySelector('h2').textContent;
+            window.location.href = url.toString();
+        });
     });
 
-    // Apply filters function
-    function applyFilters() {
-        const type = document.getElementById('typeFilter').value;
-        const category = document.getElementById('categoryFilter').value;
-        const url = new URL(window.location);
-        if (type) {
-            url.searchParams.set('type', type);
-        } else {
-            url.searchParams.delete('type');
-        }
-        if (category) {
-            url.searchParams.set('category', category);
-        } else {
-            url.searchParams.delete('category');
-        }
-        window.location.href = url.toString();
+    // Show listings if category is in URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const category = urlParams.get('category');
+    if (category) {
+        filterSection.classList.add('hidden');
+        listingsSection.classList.remove('hidden');
+        // Set selected category name based on URL category
+        const selectedCard = Array.from(filterCards).find(card => card.dataset.category === category);
+        selectedCategory.textContent = selectedCard ? selectedCard.querySelector('h2').textContent : category;
     }
 
-    // Apply filters on button click for both desktop and mobile
-    document.getElementById('applyFilters').addEventListener('click', applyFilters);
-    document.getElementById('applyFiltersMobile').addEventListener('click', () => {
-        // Sync mobile to desktop before applying
-        document.getElementById('typeFilter').value = document.getElementById('typeFilterMobile').value;
-        document.getElementById('categoryFilter').value = document.getElementById('categoryFilterMobile').value;
-        applyFilters();
+    // Back to filters button
+    backToFilters.addEventListener('click', () => {
+        const url = new URL(window.location);
+        url.searchParams.delete('category');
+        window.location.href = url.toString();
     });
 </script>

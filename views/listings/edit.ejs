@@ -16,8 +16,8 @@
             <label class="block text-gray-700 font-medium mb-2">Type</label>
             <select name="type" required class="w-full p-3 border border-gray-300 rounded">
                 <option value="">Select Type</option>
-                <option value="Interior" <%= listing.type === 'Interior' ? 'selected' : '' %>>Interior</option>
-                <option value="Exterior" <%= listing.type === 'Exterior' ? 'selected' : '' %>>Exterior</option>
+                <option value="Residential" <%= listing.type === 'Residential' ? 'selected' : '' %>>Residential</option>
+                <option value="Commercial" <%= listing.type === 'Commercial' ? 'selected' : '' %>>Commercial</option>
             </select>
         </div>
 
@@ -26,10 +26,15 @@
             <label class="block text-gray-700 font-medium mb-2">Category</label>
             <select name="category" required class="w-full p-3 border border-gray-300 rounded">
                 <option value="">Select Category</option>
-                <option value="Floor Plan" <%= listing.category === 'Floor Plan' ? 'selected' : '' %>>Floor Plan</option>
+                <option value="Living Hall" <%= listing.category === 'Living Hall' ? 'selected' : '' %>>Living Hall</option>
+                <option value="Kitchen" <%= listing.category === 'Kitchen' ? 'selected' : '' %>>Kitchen</option>
+                <option value="Bedroom" <%= listing.category === 'Bedroom' ? 'selected' : '' %>>Bedroom</option>
+                <option value="Child Bedroom" <%= listing.category === 'Child Bedroom' ? 'selected' : '' %>>Child Bedroom</option>
+                <option value="Washroom" <%= listing.category === 'Washroom' ? 'selected' : '' %>>Washroom</option>
+                <option value="Dining Area" <%= listing.category === 'Dining Area' ? 'selected' : '' %>>Dining Area</option>
+                <option value="Home Theater" <%= listing.category === 'Home Theater' ? 'selected' : '' %>>Home Theater</option>
+                <option value="Pooja Room" <%= listing.category === 'Pooja Room' ? 'selected' : '' %>>Pooja Room</option>
                 <option value="Cut Section" <%= listing.category === 'Cut Section' ? 'selected' : '' %>>Cut Section</option>
-                <option value="3D Elevation" <%= listing.category === '3D Elevation' ? 'selected' : '' %>>3D Elevation</option>
-                <option value="Interior Design" <%= listing.category === 'Interior Design' ? 'selected' : '' %>>Interior Design</option>
             </select>
         </div>
 
@@ -85,9 +90,9 @@
             <label class="block text-gray-700 font-medium mb-2">Listing Type</label>
             <select name="listingType" required class="w-full p-3 border border-gray-300 rounded">
                 <option value="">Select Listing Type</option>
-                <option value="Gallery" <%= listing.ListingType === 'gallery' ? 'selected' : '' %>>Gallery</option>
-                <option value="Projects" <%= listing.ListingType === 'projects' ? 'selected' : '' %>>Projects</option>
-                <option value="Both" <%= listing.ListingType === 'both' ? 'selected' : '' %>>Both</option>
+                <option value="Gallery" <%= listing.ListingType === 'Gallery' ? 'selected' : '' %>>Gallery</option>
+                <option value="Projects" <%= listing.ListingType === 'Projects' ? 'selected' : '' %>>Projects</option>
+                <option value="Both" <%= listing.ListingType === 'Both' ? 'selected' : '' %>>Both</option>
             </select>
         </div>
 
@@ -131,7 +136,7 @@
                     };
                     reader.readAsDataURL(result);
                 },
-                error(err) {
+               , error(err) {
                     console.error('Compression error:', err);
                     preview.classList.add('hidden');
                 }
@@ -162,7 +167,7 @@
         deleteImages.forEach(input => formData.append('deleteImages[]', input.value));
 
         // Append compressed image files
-        ['image1', 'image2', 'image3'].forEach(field => {
+        ['image1', 'image2', image3'].forEach(field => {
             if (compressedFiles[field]) {
                 formData.append(field, compressedFiles[field], compressedFiles[field].name);
             }

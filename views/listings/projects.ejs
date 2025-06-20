@@ -5,94 +5,41 @@
     <div class="max-w-screen-xl mx-auto">
         <h1 class="text-4xl font-bold text-gray-900 mb-8 text-center animate-fade-in">Our Projects</h1>
 
-        <div class="flex flex-col lg:flex-row gap-8">
-            <!-- Sidebar: Filters -->
-            <aside id="filterSidebar" class="lg:w-1/4 bg-white p-6 rounded-md shadow-lg transition-all duration-300 ease-in-out lg:block hidden">
-                <h2 class="text-2xl font-semibold text-gray-900 mb-6">Filters</h2>
-                <div class="space-y-6">
-                    <div>
-                        <label class="block text-gray-700 font-medium mb-2">Type</label>
-                        <select id="typeFilter" class="w-full p-3 border border-gray-300 rounded focus:ring-2 focus:ring-blue-600 transition">
-                            <option value="" <%= !type ? 'selected' : '' %>>All Types</option>
-                            <option value="Interior" <%= type === 'Interior' ? 'selected' : '' %>>Interior</option>
-                            <option value="Exterior" <%= type === 'Exterior' ? 'selected' : '' %>>Exterior</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label class="block text-gray-700 font-medium mb-2">Category</label>
-                        <select id="categoryFilter" class="w-full p-3 border border-gray-300 rounded focus:ring-2 focus:ring-blue-600 transition">
-                            <option value="" <%= !category ? 'selected' : '' %>>All Categories</option>
-                            <option value="Floor Plan" <%= category === 'Floor Plan' ? 'selected' : '' %>>Floor Plan</option>
-                            <option value="Cut Section" <%= category === 'Cut Section' ? 'selected' : '' %>>Cut Section</option>
-                            <option value="3D Elevation" <%= category === '3D Elevation' ? 'selected' : '' %>>3D Elevation</option>
-                            <option value="Interior Design" <%= category === 'Interior Design' ? 'selected' : '' %>>Interior Design</option>
-                        </select>
-                    </div>
-                    <button id="applyFilters" class="w-full bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition transform hover:scale-105">
-                        Apply Filters
-                    </button>
-                </div>
-            </aside>
+        <!-- Filter Buttons -->
+        <div class="flex justify-center gap-4 mb-12">
+            <button id="commercialFilter" class="filter-btn bg-blue-400 text-white px-6 py-3 rounded-lg hover:bg-blue-500 transition transform hover:scale-105">
+                Commercial
+            </button>
+            <button id="residentialFilter" class="filter-btn bg-blue-400 text-white px-6 py-3 rounded-lg hover:bg-blue-500 transition transform hover:scale-105">
+                Residential
+            </button>
+        </div>
 
-            <!-- Mobile Filter Toggle -->
-            <div class="lg:hidden">
-                <button id="toggleFilters" class="flex items-center justify-between w-full bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition">
-                    <span>Filters</span>
-                    <svg id="toggleArrow" class="w-5 h-5 transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-                    </svg>
-                </button>
-                <div id="mobileFilters" class="hidden mt-2 bg-white p-6 rounded-md shadow-lg">
-                    <div class="space-y-6">
-                        <div>
-                            <label class="block text-gray-700 font-medium mb-2">Type</label>
-                            <select id="typeFilterMobile" class="w-full p-3 border border-gray-300 rounded focus:ring-2 focus:ring-blue-600 transition">
-                                <option value="" <%= !type ? 'selected' : '' %>>All Types</option>
-                                <option value="Interior" <%= type === 'Interior' ? 'selected' : '' %>>Interior</option>
-                                <option value="Exterior" <%= type === 'Exterior' ? 'selected' : '' %>>Exterior</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label class="block text-gray-700 font-medium mb-2">Category</label>
-                            <select id="categoryFilterMobile" class="w-full p-3 border border-gray-300 rounded focus:ring-2 focus:ring-blue-600 transition">
-                                <option value="" <%= !category ? 'selected' : '' %>>All Categories</option>
-                                <option value="Floor Plan" <%= category === 'Floor Plan' ? 'selected' : '' %>>Floor Plan</option>
-                                <option value="Cut Section" <%= category === 'Cut Section' ? 'selected' : '' %>>Cut Section</option>
-                                <option value="3D Elevation" <%= category === '3D Elevation' ? 'selected' : '' %>>3D Elevation</option>
-                                <option value="Interior Design" <%= category === 'Interior Design' ? 'selected' : '' %>>Interior Design</option>
-                            </select>
-                        </div>
-                        <button id="applyFiltersMobile" class="w-full bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition transform hover:scale-105">
-                            Apply Filters
-                        </button>
+        <!-- Projects Section -->
+        <div id="projectsSection">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                <% if (projects && Array.isArray(projects) && projects.length > 0) { %>
+                    <% projects.forEach((project, index) => { %>
+                        <a href="/listings/<%= project._id %>" class="project-card block bg-white rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition transform hover:scale-105 animate-fade-in" style="animation-delay: <%= index * 0.1 %>s;" data-type="<%= project.type %>">
+                            <div class="h-80 relative">
+                                <% if (project.images && Array.isArray(project.images) && project.images.length > 0) { %>
+                                    <img src="<%= project.images[0].url %>" alt="<%= project.Name || 'Project' %>" class="w-full h-full object-cover transition-transform duration-300 hover:scale-110">
+                                <% } else { %>
+                                    <div class="w-full h-full bg-gray-200 flex items-center justify-center">
+                                        <span class="text-gray-500 text-lg font-medium">No Image Available</span>
+                                    </div>
+                                <% } %>
+                            </div>
+                            <div class="p-6">
+                                <h3 class="text-xl font-semibold text-gray-900 truncate"><%= project.Name || 'Unnamed Project' %></h3>
+                            </div>
+                        </a>
+                    <% }) %>
+                <% } else { %>
+                    <div class="col-span-full bg-white rounded-lg shadow-lg p-8 text-center animate-fade-in">
+                        <p class="text-xl text-gray-600">No projects found.</p>
                     </div>
-                </div>
-            </div>
-
-            <!-- Projects Grid -->
-            <div class="lg:w-3/4">
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                    <% if (projects && Array.isArray(projects) && projects.length > 0) { %>
-                        <% projects.forEach((project, index) => { %>
-                            <a href="/listings/<%= project._id %>" class="block bg-white rounded-md overflow-hidden shadow-lg hover:shadow-xl transition transform hover:scale-105 animate-fade-in" style="animation-delay: <%= index * 0.1 %>s;">
-                                <div class="h-80 relative">
-                                    <% if (project.images && Array.isArray(project.images) && project.images.length > 0) { %>
-                                        <img src="<%= project.images[0].url %>" alt="<%= project.Name || 'Project' %>" class="w-full h-full object-cover transition-transform duration-300 hover:scale-110">
-                                    <% } else { %>
-                                        <div class="w-full h-full bg-gray-200 flex items-center justify-center">
-                                            <span class="text-gray-500">No Image</span>
-                                        </div>
-                                    <% } %>
-                                </div>
-                                <div class="p-6">
-                                    <h2 class="text-xl font-semibold text-gray-900 truncate"><%= project.Name || 'Unnamed Project' %></h2>
-                                </div>
-                            </a>
-                        <% }) %>
-                    <% } else { %>
-                        <p class="text-center text-gray-600 col-span-full animate-fade-in">No projects found.</p>
-                    <% } %>
-                </div>
+                <% } %>
             </div>
         </div>
     </div>
@@ -106,62 +53,111 @@
     .animate-fade-in {
         animation: fade-in 0.5s ease-out forwards;
     }
+    .filter-btn.active {
+        background-color: #1e40af; /* Darker blue for active state */
+        transform: scale(1.05);
+    }
+    .filter-btn:not(.active) {
+        background-color: #60a5fa; /* Lighter blue for inactive state */
+    }
+    .filter-btn:not(.active):hover {
+        background-color: #3b82f6; /* Slightly darker blue for inactive hover */
+    }
 </style>
 
 <script>
-    // Toggle mobile filters
-    const toggleButton = document.getElementById('toggleFilters');
-    const mobileFilters = document.getElementById('mobileFilters');
-    const toggleArrow = document.getElementById('toggleArrow');
+    // Get DOM elements
+    const commercialFilter = document.getElementById('commercialFilter');
+    const residentialFilter = document.getElementById('residentialFilter');
+    const projectCards = document.querySelectorAll('.project-card');
 
-    toggleButton.addEventListener('click', () => {
-        mobileFilters.classList.toggle('hidden');
-        toggleArrow.classList.toggle('rotate-180');
-        // Sync mobile to desktop filters on toggle
-        document.getElementById('typeFilterMobile').value = document.getElementById('typeFilter').value;
-        document.getElementById('categoryFilterMobile').value = document.getElementById('categoryFilter').value;
-    });
-
-    // Sync mobile to desktop filters on change
-    document.getElementById('typeFilterMobile').addEventListener('change', () => {
-        document.getElementById('typeFilter').value = document.getElementById('typeFilterMobile').value;
-    });
-    document.getElementById('categoryFilterMobile').addEventListener('change', () => {
-        document.getElementById('categoryFilter').value = document.getElementById('categoryFilterMobile').value;
-    });
-
-    // Sync desktop to mobile filters on change
-    document.getElementById('typeFilter').addEventListener('change', () => {
-        document.getElementById('typeFilterMobile').value = document.getElementById('typeFilter').value;
-    });
-    document.getElementById('categoryFilter').addEventListener('change', () => {
-        document.getElementById('categoryFilterMobile').value = document.getElementById('categoryFilter').value;
-    });
-
-    // Apply filters function
-    function applyFilters() {
-        const type = document.getElementById('typeFilter').value;
-        const category = document.getElementById('categoryFilter').value;
-        const url = new URL(window.location);
-        if (type) {
-            url.searchParams.set('type', type);
-        } else {
-            url.searchParams.delete('type');
+    // Function to set active button
+    function setActiveButton(button) {
+        [commercialFilter, residentialFilter].forEach(btn => {
+            btn.classList.remove('active');
+        });
+        if (button) {
+            button.classList.add('active');
         }
-        if (category) {
-            url.searchParams.set('category', category);
-        } else {
-            url.searchParams.delete('category');
-        }
-        window.location.href = url.toString();
     }
 
-    // Apply filters on button click for both desktop and mobile
-    document.getElementById('applyFilters').addEventListener('click', applyFilters);
-    document.getElementById('applyFiltersMobile').addEventListener('click', () => {
-        // Sync mobile to desktop before applying
-        document.getElementById('typeFilter').value = document.getElementById('typeFilterMobile').value;
-        document.getElementById('categoryFilter').value = document.getElementById('categoryFilterMobile').value;
-        applyFilters();
+    // Function to filter projects
+    function filterProjects(type) {
+        projectCards.forEach(card => {
+            const cardType = card.dataset.type;
+            if (type === 'all' || cardType === type) {
+                card.style.display = 'block';
+            } else {
+                card.style.display = 'none';
+            }
+        });
+
+        // Show "No projects found" if no cards are visible
+        const visibleCards = Array.from(projectCards).filter(card => card.style.display === 'block');
+        const noProjectsDiv = document.querySelector('.col-span-full');
+        if (visibleCards.length === 0 && !noProjectsDiv) {
+            const projectsGrid = document.querySelector('#projectsSection .grid');
+            projectsGrid.innerHTML = `
+                <div class="col-span-full bg-white rounded-lg shadow-lg p-8 text-center animate-fade-in">
+                    <p class="text-xl text-gray-600">No projects found.</p>
+                </div>
+            `;
+        } else if (visibleCards.length > 0 && noProjectsDiv) {
+            noProjectsDiv.remove();
+            projectCards.forEach(card => {
+                if (type === 'all' || card.dataset.type === type) {
+                    card.style.display = 'block';
+                }
+            });
+        }
+    }
+
+    // Handle filter button clicks
+    commercialFilter.addEventListener('click', () => {
+        const url = new URL(window.location);
+        if (commercialFilter.classList.contains('active')) {
+            // Deactivate and show all projects
+            url.searchParams.delete('type');
+            window.history.pushState({}, '', url);
+            setActiveButton(null);
+            filterProjects('all');
+        } else {
+            // Activate and show Commercial projects
+            url.searchParams.set('type', 'Commercial');
+            window.history.pushState({}, '', url);
+            setActiveButton(commercialFilter);
+            filterProjects('Commercial');
+        }
     });
+
+    residentialFilter.addEventListener('click', () => {
+        const url = new URL(window.location);
+        if (residentialFilter.classList.contains('active')) {
+            // Deactivate and show all projects
+            url.searchParams.delete('type');
+            window.history.pushState({}, '', url);
+            setActiveButton(null);
+            filterProjects('all');
+        } else {
+            // Activate and show Residential projects
+            url.searchParams.set('type', 'Residential');
+            window.history.pushState({}, '', url);
+            setActiveButton(residentialFilter);
+            filterProjects('Residential');
+        }
+    });
+
+    // Initialize based on URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const type = urlParams.get('type');
+    if (type === 'Commercial') {
+        setActiveButton(commercialFilter);
+        filterProjects('Commercial');
+    } else if (type === 'Residential') {
+        setActiveButton(residentialFilter);
+        filterProjects('Residential');
+    } else {
+        setActiveButton(null);
+        filterProjects('all');
+    }
 </script>

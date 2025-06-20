@@ -12,25 +12,29 @@
         </div>
 
         <!-- Type -->
-         
         <div>
             <label class="block text-gray-700 font-medium mb-2">Type</label>
             <select name="type" required class="w-full p-3 border border-gray-300 rounded">
                 <option value="">Select Type</option>
-                <option value="Interior">Interior</option>
-                <option value="Exterior">Exterior</option>
+                <option value="Residential">Residential</option>
+                <option value="Commercial">Commercial</option>
             </select>
         </div>
 
         <!-- Category -->
         <div>
-            <label class="block text-gray-700 font-medium mb-2">Category</label>
-            <select name="category" required class="w-full p-3 border border-gray-300 rounded">
+            <label class="block text-gray-700 font-medium mb-2">Category (Optional)</label>
+            <select name="category" class="w-full p-3 border border-gray-300 rounded">
                 <option value="">Select Category</option>
-                <option value="Floor Plan">Floor Plan</option>
+                <option value="Living Hall">Living Hall</option>
+                <option value="Kitchen">Kitchen</option>
+                <option value="Bedroom">Bedroom</option>
+                <option value="Child Bedroom">Child Bedroom</option>
+                <option value="Washroom">Washroom</option>
+                <option value="Dining Area">Dining Area</option>
+                <option value="Home Theater">Home Theater</option>
+                <option value="Pooja Room">Pooja Room</option>
                 <option value="Cut Section">Cut Section</option>
-                <option value="3D Elevation">3D Elevation</option>
-                <option value="Interior Design">Interior Design</option>
             </select>
         </div>
 
@@ -131,7 +135,7 @@
         }
     }
 
-    // Intercept form submission to use compressed files
+    // Intercept form submission to use compressed files and set default category
     document.getElementById('listingForm').addEventListener('submit', async (e) => {
         e.preventDefault();
         const loading = document.getElementById('loading');
@@ -143,7 +147,12 @@
         // Append text fields
         ['name', 'type', 'category', 'description', 'location', 'listingType'].forEach(field => {
             const value = form.querySelector(`[name="${field}"]`).value;
-            if (value) formData.append(field, value);
+            // Set default category to 'project_section' if none selected
+            if (field === 'category' && !value) {
+                formData.append(field, 'project_section');
+            } else if (value) {
+                formData.append(field, value);
+            }
         });
 
         // Append compressed image files

@@ -8,7 +8,7 @@ const multer = require('multer');
 const { v2: cloudinary } = require('cloudinary');
 const Listing = require('./models/listing.model.js');
 const methodOverride = require('method-override');
-
+const Contact = require('./models/contact.model.js');
 const app = express();
 const connectDB = require('./db/db.js');
 
@@ -42,25 +42,9 @@ const uploadOnCloudinary = async (fileBuffer, options = {}) => {
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
 
-// Nodemailer Transport Setup
-const transporter = nodeMailer.createTransport({
-  secure: true,
-  host: 'smtp.gmail.com',
-  port: 465,
-  auth: {
-    user: 'punnyaeeconstruction@gmail.com',
-    pass: 'vgldszkavhiqpwxp',
-  },
-});
 
-function sendMail(to, sub, msg) {
-  return transporter.sendMail({
-    from: '"Shubamrut Designing Studio" <punnyaeeconstruction@gmail.com>',
-    to,
-    subject: sub,
-    html: msg,
-  });
-}
+
+
 
 // Middleware
 app.use(express.urlencoded({ extended: true }));
@@ -90,43 +74,38 @@ app.get('/contact', (req, res) => {
 
 app.post('/contact', async (req, res) => {
   const { name, phone, email, subject, message } = req.body;
+
+  // Validate required fields
   if (!name || !phone) {
-    return res.status(400).json({ error: 'Name and phone are required.' });
+    return res.status(400).render('error', {
+      title: 'Error | Shubamrut Designing Studio',
+      message: 'Name and phone are required.',
+      backUrl: '/home'
+    });
   }
 
   try {
-    const mailOptions = {
-      from: '"Shubamrut Contact Form" <punnyaeeconstruction@gmail.com>',
-      to: 'shubhamrut16@gmail.com',
-      subject: subject || 'New Contact Form Submission',
-      html: `
-        <div style="font-family: Arial, sans-serif; background-color: #f9f9ff; padding: 20px; border-radius: 8px; color: #333;">
-          <h2 style="color: #5B21B6;">📩 New Contact Form Submission</h2>
-          <div style="margin-top: 10px; padding: 15px; background: white; border-radius: 6px; box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
-            <p><strong>👤 Name:</strong> ${name}</p>
-            <p><strong>📞 Phone:</strong> ${phone}</p>
-            ${email ? `<p><strong>✉️ Email:</strong> ${email}</p>` : ''}
-            ${subject ? `<p><strong>📌 Subject:</strong> ${subject}</p>` : ''}
-            ${message ? `<p><strong>💬 Message:</strong><br><span style="white-space: pre-line;">${message}</span></p>` : ''}
-          </div>
-          <div style="margin-top: 30px; text-align: center; color: #888; font-size: 13px;">
-            <p>Sent from <strong>Shubamrut Designing Studio</strong></p>
-            <p>📍 Garkheda, Chhatrapati Sambhaji Nagar | ☎ +91 98908 86002</p>
-            <div style="margin-top: 10px;">
-              <a href="#" style="margin: 0 8px; color: #E1306C;">Instagram</a> |
-              <a href="#" style="margin: 0 8px; color: #1877F2;">Facebook</a> |
-              <a href="#" style="margin: 0 8px; color: #0077B5;">LinkedIn</a>
-            </div>
-          </div>
-        </div>
-      `,
-    };
+    // Save to database
+    const contact = new Contact({
+      fullName: name,
+      phoneNumber: phone,
+      email: email || '',
+      subject: subject || '',
+      message: message || ''
+    });
+    await contact.save();
 
-    await sendMail('shubhamrut16@gmail.com', subject || 'New Contact Form Submission', mailOptions.html);
-    res.status(200).json({ success: true, message: 'Message sent successfully!' });
+    // Render home page
+    res.render('listings/home', {
+      title: 'Home | Shubamrut Designing Studio'
+    });
   } catch (error) {
-    console.error('Error sending email:', error);
-    res.status(500).json({ success: false, error: 'Failed to send message.' });
+    console.error('Error saving contact form:', error);
+    res.status(500).render('error', {
+      title: 'Error | Shubamrut Designing Studio',
+      message: 'Something went wrong while submitting the contact form.',
+      backUrl: '/home'
+    });
   }
 });
 
